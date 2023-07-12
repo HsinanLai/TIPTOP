@@ -1,0 +1,62 @@
+#[SQL]Question about Accounts Payable Transaction Report
+select  aba01 GLNumber,aba02 GLDate,
+
+        aba03 GLYear,aba04 GLMonth,apa05 BillVendor,a.pmc03,apa06 PaymentVendor,b.pmc03,
+
+        abb03 AcctNum,aag02,decode(abb06,'2','Credit','1','Debit') DebitCredit,abb24 Currency ,abb07 Amount, aba07 APNumber
+
+from abb_file,aba_file,aag_file,apa_file,pmc_file  a, pmc_file b
+
+where abb03='201100'
+
+  and abb01=aba01
+
+  and abb00=aba00
+
+  and abb03=aag01
+
+  and aag00=abb00
+
+  and aba00='00'
+
+  and aba06='AP'
+
+  and aba07 not like 'AP08%'
+
+  and trim(aba07)=apa01(+)
+
+  and a.pmc01(+)=apa05
+
+  and b.pmc01(+)=apa06
+
+  and aba02 between to_date('2018/01/01','yyyy/mm/dd') and to_date('2018/10/31','yyyy/mm/dd')
+
+union
+
+  select  aba01 GLNumber,aba02 GLDate,
+
+        aba03 GLYear,aba04 GLMonth,'' BillVendor,'',apf03 PaymentVendor,apf12,
+
+        abb03 AcctNum,aag02,decode(abb06,'2','Credit','1','Debit') DebitCredit,abb24 Currency ,abb07 Amount, aba07 APNumber
+
+from abb_file,aba_file,aag_file,apf_file
+
+where abb03='201100'
+
+  and abb01=aba01
+
+  and abb00=aba00
+
+  and abb03=aag01
+
+  and aag00=abb00
+
+  and aba00='00'
+
+  and aba06='AP'
+
+  and aba07  like 'AP08%'
+
+  and trim(aba07)=apf01(+)
+
+  and aba02 between to_date('2018/08/01','yyyy/mm/dd') and to_date('2018/10/31','yyyy/mm/dd')
