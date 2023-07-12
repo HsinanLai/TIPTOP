@@ -1,0 +1,62 @@
+#[SQL] 00 vs 01帳套 拋 26 帳套 異常時的 SQL 處理指令
+#丟掉暫存檔
+
+drop table abatemp
+
+ 
+
+#找出不存在 26 帳套 的 00/01 帳套的傳票 , 並建立暫存檔
+
+create table abatemp as
+
+select *
+
+from aba_file
+
+where aba01 like 'AG01%' and aba00 = '00' and aba19='Y' and aba03=2019 and aba04=1
+
+  and aba01 not in ( select aba01 from aba_file where aba01 like 'AG01%' and aba00 = '26' and aba03=2018 and aba04=7 )
+
+union
+
+select *
+
+from aba_file
+
+where aba01 like 'AG03%' and aba00 = '00' and aba19='Y'  and aba03=2019 and aba04=1
+
+  and aba01 not in ( select aba01 from aba_file where aba01 like 'AG03%' and aba00 = '26' and aba03=2018 and aba04=7 )
+
+union
+
+select *
+
+from aba_file
+
+where aba01 like 'AG08%' and aba00 = '00' and aba19='Y'  and aba03=2019 and aba04=1
+
+  and aba01 not in ( select aba01 from aba_file where aba01 like 'AG08%' and aba00 = '26' and aba03=2018 and aba04=7 )
+
+ 
+
+#檢查暫存檔 
+
+select * from abatemp
+
+ 
+
+# 更改 00/01 帳套的拋轉旗標
+
+update aba_file 
+
+set abaud06=''
+
+where aba00='00' and aba01 in ( select aba01 from abatemp) 
+
+ 
+
+#重新執行AGLP800 拋轉傳票即可
+
+ 
+
+# 回頭檢查是否還有傳票沒有拋轉
