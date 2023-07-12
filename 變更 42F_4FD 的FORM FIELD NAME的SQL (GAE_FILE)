@@ -1,0 +1,20 @@
+#變更 42F_4FD 的FORM FIELD NAME的SQL (GAE_FILE)
+1. select * from gae_file where gae01='cpmp812'
+
+ 
+
+2. drop database link aoet_test connect to aoettw identified by aoettw using 'toptest'
+
+ 
+
+3. DELETE from gae_file where gae01='cpmp812'
+
+ 
+
+4. insert into gae_file
+
+select * from gae_file@aoet_test where gae01='cpmp812'
+
+ 
+
+5. select * from gae_file where gae01='cpmp812'
