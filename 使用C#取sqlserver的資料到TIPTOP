@@ -1,0 +1,403 @@
+using System;
+
+using System.Collections.Generic;
+
+using System.Linq;
+
+using System.Web;
+
+using System.Web.UI;
+
+using System.Web.UI.WebControls;
+
+using System.Data;
+
+using System.Data.OracleClient;
+
+using System.Data.SqlClient;
+
+ 
+
+namespace WebApplication1
+
+{
+
+    public partial class _Default : System.Web.UI.Page
+
+    {
+
+        String LogNum;
+
+        protected void Page_Load(object sender, EventArgs e)
+
+        {
+
+            if (!Page.IsPostBack)
+
+            {
+
+                DropDownList1.Items.Add("axr");
+
+                DropDownList1.Items.Add("anm");
+
+                DropDownList1.Items.Add("aap");
+
+                DropDownList1.Items.Add("agl");
+
+            }         
+
+        }
+
+ 
+
+        protected void Button1_Click(object sender, EventArgs e)
+
+        {
+
+            String SQLDs = "dbserver";
+
+            String SQLUser = "sa";
+
+            String SQLPwd = "bmigckx7";
+
+            String SQLDB = "HPO01";
+
+            String MSSQLString = "Data Source=" + SQLDs + ";Initial Catalog=" + SQLDB + ";User ID=" + SQLUser + ";Password=" + SQLPwd;
+
+            ListBox3.Items.Clear();
+
+            ListBox2.Items.Clear();
+
+            SqlConnection MSSQLConnection = new SqlConnection(MSSQLString);
+
+            MSSQLConnection.Open();
+
+            SqlCommand myCommand = MSSQLConnection.CreateCommand();
+
+           // String CText = " select * from ACTTA where TA002 like '0509%'";
+
+            String CText = "select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = '"  + ListBox4.SelectedItem.Text +  "'";
+
+            myCommand.CommandText = CText;
+
+            SqlDataReader MSSQLReader = myCommand.ExecuteReader();
+
+          //  ListBox2.Items.Add(MSSQLReader);
+
+            LogNum = "";
+
+            for (int i = 0; i < MSSQLReader.FieldCount; i++)
+
+            {
+
+ 
+
+                ListBox3.Items.Add(MSSQLReader.GetName(i));
+
+            }
+
+            ListBox3.Items.Add(LogNum);
+
+            while (MSSQLReader.Read())
+
+            {
+
+                LogNum = "";
+
+                for (int i = 0; i < MSSQLReader.FieldCount; i++)
+
+                {
+
+                   
+
+                    LogNum = LogNum+ MSSQLReader[i].ToString() + "\t" ;
+
+                }
+
+                ListBox2.Items.Add(LogNum);
+
+ 
+
+            }
+
+            MSSQLReader.Close();
+
+            MSSQLConnection.Close();
+
+        }
+
+        protected void Button_click(object sender, EventArgs e)
+
+        {
+
+            Button btn = (Button)sender;
+
+            TextBox2.Text = TextBox2.Text + btn.Text;
+
+        }
+
+        protected void opButton_click(object sender, EventArgs e)
+
+        {
+
+            Button btn = (Button)sender;
+
+            TextBox4.Text = TextBox2.Text;
+
+            TextBox3.Text =  btn.Text;
+
+            TextBox2.Text="";
+
+        }
+
+        protected void calcButton_click(object sender, EventArgs e)
+
+        {
+
+            Button btn = (Button)sender;
+
+            switch (TextBox3.Text)
+
+            {
+
+                case "+":
+
+                    TextBox2.Text=(Convert.ToDecimal(TextBox2.Text) + Convert.ToDecimal(TextBox4.Text)).ToString();
+
+                    break;
+
+                case "-":
+
+                    TextBox2.Text = (Convert.ToDouble(TextBox2.Text) - Convert.ToDouble(TextBox4.Text)).ToString();
+
+                    break;
+
+            }
+
+         
+
+        }
+
+ 
+
+        protected void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+
+        {
+
+ 
+
+ 
+
+        }
+
+ 
+
+        protected void Button19_Click(object sender, EventArgs e)
+
+        {
+
+            String ORADS = "192.168.22.34/topprod";
+
+            String ORAUser = "hpo01_test";
+
+            String ORAPwd = "hpo01_test";
+
+            String OracleString = "User ID=" + ORAUser + ";Data Source=" + ORADS + ";Password=" + ORAPwd;
+
+            ListBox1.Items.Clear();
+
+            OracleConnection OCLConnection = new OracleConnection(OracleString);
+
+            OCLConnection.Open();
+
+            OracleCommand catCMD = OCLConnection.CreateCommand();
+
+            String OText = "select * from gaz_file where gaz02='0' and  gaz01 like '" + DropDownList1.SelectedItem.Text + "%'";
+
+            catCMD.CommandText = OText;
+
+            OracleDataReader myReader = catCMD.ExecuteReader();
+
+            while (myReader.Read())
+
+            {
+
+                LogNum = myReader["gaz01"].ToString() + "\t" + myReader["gaz03"].ToString();
+
+                ListBox1.Items.Add(LogNum);
+
+            }
+
+            myReader.Close();
+
+            OCLConnection.Close();
+
+ 
+
+        }
+
+ 
+
+        protected void ListBox2_SelectedIndexChanged(object sender, EventArgs e)
+
+        {
+
+ 
+
+        }
+
+ 
+
+        protected void Button20_Click(object sender, EventArgs e)
+
+        {
+
+            String SQLDs = "dbserver";
+
+            String SQLUser = "sa";
+
+            String SQLPwd = "bmigckx7";
+
+            String SQLDB = "HPO01";
+
+            String MSSQLString = "Data Source=" + SQLDs + ";Initial Catalog=" + SQLDB + ";User ID=" + SQLUser + ";Password=" + SQLPwd;
+
+            SqlConnection MSSQLConnection = new SqlConnection(MSSQLString);
+
+            MSSQLConnection.Open();
+
+            SqlCommand myCommand = MSSQLConnection.CreateCommand();
+
+            // String CText = " select * from ACTTA where TA002 like '0509%'";
+
+            String CText = "select distinct TABLE_NAME from INFORMATION_SCHEMA.COLUMNS";
+
+            myCommand.CommandText = CText;
+
+            SqlDataReader MSSQLReader = myCommand.ExecuteReader();
+
+            //  ListBox2.Items.Add(MSSQLReader);
+
+          
+
+            while (MSSQLReader.Read())
+
+            {
+
+                LogNum = "";
+
+                for (int i = 0; i < MSSQLReader.FieldCount; i++)
+
+                {
+
+                   ListBox4.Items.Add(MSSQLReader[i].ToString() );
+
+                }
+
+ 
+
+            }
+
+            MSSQLReader.Close();
+
+            MSSQLConnection.Close();
+
+        }
+
+ 
+
+        protected void Button21_Click(object sender, EventArgs e)
+
+        {
+
+            String ORADS = "192.168.22.34/topprod";
+
+            String ORAUser = "hpo01_test";
+
+            String ORAPwd = "hpo01_test";
+
+            String OracleString = "User ID=" + ORAUser + ";Data Source=" + ORADS + ";Password=" + ORAPwd;
+
+            ListBox1.Items.Clear();
+
+            OracleConnection OCLConnection = new OracleConnection(OracleString);
+
+            OCLConnection.Open();
+
+            OracleCommand catCMD = OCLConnection.CreateCommand();
+
+            //String OText = "SELECT * FROM User_Objects WHERE Object_Name = 'AAA_FILE'";
+
+            String OText = " select ALL_TAB_COLUMNS.OWNER,ALL_TAB_COLUMNS.COLUMN_NAME,  COLUMN_ID,  ";
+
+            OText = OText + "DATA_DEFAULT, NULLABLE,  ";
+
+            OText = OText + " DATA_TYPE,  DATA_PRECISION, ";
+
+            OText = OText + " COMMENTS, DATA_LENGTH ";
+
+            OText = OText + " from ALL_TAB_COLUMNS, All_Col_Comments  ";
+
+            OText = OText + " where  ALL_TAB_COLUMNS.OWNER = ALL_COL_COMMENTS.Owner AND ";
+
+            OText = OText + " ALL_TAB_COLUMNS.TABLE_NAME = ALL_COL_COMMENTS.TABLE_NAME AND ";
+
+            OText = OText + "  ALL_TAB_COLUMNS.COLUMN_NAME = all_col_comments.column_name and ";
+
+            OText = OText + "  ALL_TAB_COLUMNS.TABLE_NAME = 'AAA_FILE' ";
+
+            // String OText = " SELECT * FROM User_Tables WHERE Table_Name = 'AAA_FILE' ALL_TAB_COLUMNS.OWNER  = '" + ORAUser + "'  and";
+
+            catCMD.CommandText = OText;
+
+            OracleDataReader myReader = catCMD.ExecuteReader();
+
+            LogNum = "";
+
+            for (int i = 0; i < myReader.FieldCount; i++)
+
+            {
+
+ 
+
+                ListBox6.Items.Add(myReader.GetName(i));
+
+            }
+
+            ListBox3.Items.Add(LogNum);
+
+            while (myReader.Read())
+
+            {
+
+                LogNum = "";
+
+                for (int i = 0; i < myReader.FieldCount; i++)
+
+                {
+
+ 
+
+                    LogNum = LogNum + myReader[i].ToString() + "\t";
+
+                }
+
+                ListBox5.Items.Add(LogNum);
+
+ 
+
+            }
+
+            myReader.Close();
+
+            OCLConnection.Close();
+
+        }
+
+ 
+
+     
+
+    }
+
+}
