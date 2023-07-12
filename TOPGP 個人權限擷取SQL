@@ -1,0 +1,9 @@
+@TOPGP 個人權限擷取SQL
+
+
+select distinct xx1,gaz03,xx from
+(select zxw04 as xx1,gaz03,zxw05 as xx from zxw_file, (select zz01,gaz03,gaz05 from zz_file,gaz_file where zz01=gaz01 and gaz02=0)
+ where zxw01='600104' and zxw03=2 and zxw04=zz01
+union
+  select zy02 as xx1,gaz03,zy03 as xx from zxw_file,zy_file, (select zz01,gaz03,gaz05 from zz_file,gaz_file where zz01=gaz01 and gaz02=0)
+ where zxw01='600104' and zxw03=1 and zxw04=zy01 and zy02=zz01)order by xx1
