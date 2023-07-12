@@ -1,0 +1,24 @@
+查詢委外收貨單與採購單狀態SQL
+
+
+
+
+select rvb01 收貨單號,rvb02 收貨單項次,pmn01 採購單號,pmn02 採購單項次,pmn16 採購單狀態,
+
+sfb01 工單單號,sfb04 工單狀態
+
+ 
+
+from pmn_file, rvb_file , sfb_file
+
+ 
+
+where pmn01=rvb04 and pmn02=rvb03 and pmn01=sfb01
+
+ 
+
+and rvb01 in ('5901-12070002','5901-12070004')
+
+ 
+
+ and sfb04=8
