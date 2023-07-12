@@ -1,4 +1,5 @@
 #[SQL]Question about Accounts Payable Transaction Report
+#aglr905
 select  aba01 GLNumber,aba02 GLDate,
 
         aba03 GLYear,aba04 GLMonth,apa05 BillVendor,a.pmc03,apa06 PaymentVendor,b.pmc03,
